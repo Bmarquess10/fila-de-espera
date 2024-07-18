@@ -1,22 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [patients, setPatients] = useState([]);
+  const [newPatient, setNewPatient] = useState("");
+
+  const addPatient = () => {
+    if (newPatient.trim() !== "") {
+      setPatients([...patients, newPatient.trim()]);
+      setNewPatient("");
+    }
+  };
+
+  const removePatient = (index) => {
+    const updatedPatients = patients.filter((_, i) => i !== index);
+    setPatients(updatedPatients);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Fila de Espera</h1>
+        <div className="form">
+          <input
+            type="text"
+            value={newPatient}
+            onChange={(e) => setNewPatient(e.target.value)}
+            placeholder="Nome do paciente"
+          />
+          <button onClick={addPatient}>Adicionar</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {patients.map((patient, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{patient}</td>
+                <td>
+                  <button onClick={() => removePatient(index)}>Atendido</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </header>
     </div>
   );
